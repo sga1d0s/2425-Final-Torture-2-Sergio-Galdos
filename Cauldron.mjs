@@ -9,83 +9,35 @@ export default class Cauldron {
 
     this.ingredient1 = null
     this.ingredient2 = null
+
     this.mod = null
+    this.value = null
+    this.weight = null
+    this.time = null
+    this.effect = null
   }
 
   createPotion(name1, name2) {
 
     let potion = null
-    let mod = null
-    let effectName = null
 
     let weight = null
     let value = null
     let time = null
 
-    const positiveEffects = ["Fortifity", "Resist", "Cure", "Restore", "Regenerate", "Invisibility", "Waterbreathing"]
-
-    let contPos1 = 0
-    let contPos2 = 0
-    let contNeg = 0
-
-    let isElixir = false
-    let isLeeser = false
-    let isGreater = false
-
     // extraer información de cada ingrediente
     this.extractIngredients(name1, name2)
 
-    //contar efectos positivos ing 1
-    for (let i = 0; i < this.ingredient1.effects.length; i++) {
-      const effect = this.ingredient1.effects[i];
-      for (let j = 0; j < positiveEffects.length; j++) {
-        const positiveEfect = positiveEffects[j];
+    let nameElixir = `${this.mod} elixir of ${this.name}`
+    let namePoison = `${this.mod} poison of ${this.name}`
 
-        if (effect.includes(positiveEfect)) {
-          contPos1++
-        }
-      }
-    }
-
-    // contar efectos positivos ing2
-    for (let i = 0; i < this.ingredient2.effects.length; i++) {
-      const effect = this.ingredient2.effects[i];
-
-      for (let j = 0; j < positiveEffects.length; j++) {
-        const positiveEfect = positiveEffects[j];
-
-        if (effect.includes(positiveEfect)) {
-          contPos2++
-        }
-      }
-    }
-
-    if (contPos1 >= 1 && contPos2 >= 1) {
-      isElixir = true
-      if (contPos1 === 0 || contPos2 === 0) {
-        mod = "Leeser"
-        value = this.ingredient1.value + this.ingredient2.value
-      } else {
-        mod = "Greater"
-        value = this.ingredient1.value + this.ingredient2.value * 3
-      }
-    }
-
-    let nameElixir = `${mod} elixir of ${effectName}`
-    let namePoison = `${mod} poison of ${effectName}`
-    let nameSanity = "Poison of Sanity"
-
-    if (isElixir) {
+    if (this.isElixir()) {
       potion = new Elixir(nameElixir, value, weight = 10, time = "time")
-    }
-
-    if (this.isPoison()) {
-      return new Poison(namePoison, value, weight = 10, time = "time")
-    }
-
-    if (this.isSanity()) {
-      return new Sanity(nameSanity, 1000, 1, 10)
-    }
+    } else if (this.isPoison()) {
+      potion = new Poison(namePoison, value, weight = 10, time = "time")
+    } else if (this.isSanity()) {
+      potion = new Sanity("Poison of Sanity", 1000, 1, 10)
+    } else  potion = new ArrantPrack("ArrantPrack", 1, 0, 1)
 
     // devolver la pocion creada
     return potion
@@ -105,6 +57,59 @@ export default class Cauldron {
     }
   }
 
+  isElixir() {
+
+    let cont1 = 0
+    let cont2 = 0
+    let elixir = false
+
+    const positiveEffects = ["Fortifity", "Resist", "Cure", "Restore", "Regenerate", "Invisibility", "Waterbreathing"]
+
+    for (let i = 0; i < this.ingredient1.effects.length; i++) {
+      const effect = this.ingredient1.effects[i];
+
+      for (let i = 0; i < positiveEffects.length; i++) {
+        const posi = positiveEffects[i];
+
+        if (effect.includes(posi)) {
+          cont1++
+        }
+      }
+    }
+
+    for (let i = 0; i < this.ingredient2.effects.length; i++) {
+      const effect = this.ingredient2.effects[i];
+
+      for (let i = 0; i < positiveEffects.length; i++) {
+        const posi = positiveEffects[i];
+
+        if (effect.includes(posi)) {
+          cont2++
+        }
+      }
+    }
+
+    if (cont1 >= 1 && cont2 < 1) {
+      this.mod = "Leeser"
+      elixir = true
+    }
+
+    if (cont2 >= 1 && cont1 < 1) {
+      this.mod = "Leeser"
+      elixir = true
+    }
+
+    if (cont1 >= 1 && cont2 >= 1) {
+      this.mod = "Greater"
+      elixir = true
+    }
+    if (cont1 < 1 && cont2 < 1) {
+      elixir = false
+    }
+
+    return elixir
+  }
+
   isPoison() {
 
     let contNeg1 = 0
@@ -112,38 +117,37 @@ export default class Cauldron {
     let poison = false
 
     const negativeEffects = ["Weakness", "Damage", "Ravage", "Frenzy", "Fear", "Paralisis", "Slow"]
-    // const negativeEffects = "Weakness Damage Ravage Frenzy Fear Paralisis Slow"
 
     for (let i = 0; i < this.ingredient1.effects.length; i++) {
-      const effect = this.ingredient1[i];
+      const effect = this.ingredient1.effects[i];
 
       for (let i = 0; i < negativeEffects.length; i++) {
         const nega = negativeEffects[i];
 
-        if (effect === nega) {
+        if (effect.includes(nega)) {
           contNeg1++
         }
       }
     }
 
     for (let i = 0; i < this.ingredient2.effects.length; i++) {
-      const effect = this.ingredient2[i];
+      const effect = this.ingredient2.effects[i];
 
       for (let i = 0; i < negativeEffects.length; i++) {
         const nega = negativeEffects[i];
 
-        if (effect === nega) {
+        if (effect.includes(nega)) {
           contNeg2++
         }
       }
     }
 
-    if (contNeg1 >= 1 && contNeg2 === 0) {
+    if (contNeg1 >= 1 && contNeg2 < 1) {
       this.mod = "Leeser"
       poison = true
     }
 
-    if (contNeg2 >= 1 && contNeg1 === 0) {
+    if (contNeg2 >= 1 && contNeg1 < 1) {
       this.mod = "Leeser"
       poison = true
     }
@@ -152,7 +156,7 @@ export default class Cauldron {
       this.mod = "Greater"
       poison = true
     }
-    if (contNeg1 === 0 && contNeg2 === 0) {
+    if (contNeg1 < 1 && contNeg2 < 1) {
       poison = false
     }
 
