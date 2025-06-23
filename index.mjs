@@ -1,4 +1,5 @@
 import Ingredient from "./Ingredient.mjs";
+import Cauldron from "./Cauldron.mjs";
 
 main()
 
@@ -11,11 +12,17 @@ async function main() {
   // crear array de ingredientes
   const ingredientsArray = createIncredients(ingredients)
   // console.log(ingredientsArray)
-  
+
   // crear la factoría de cauldron
+  const cauldron = new Cauldron(ingredientsArray)
 
   // crear las 6 pocines
+  const potion1 = cauldron.createPotion("Bear Claws", "Bee")
+  const potion2 = cauldron.createPotion("Chicken's Egg", "Chaurus Eggs")
 
+  potion1.showInfo()
+
+  // potion1.showInfo()
 }
 
 async function getData() {

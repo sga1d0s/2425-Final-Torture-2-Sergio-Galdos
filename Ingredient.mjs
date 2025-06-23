@@ -1,5 +1,4 @@
 
-
 export default class Ingredient {
   constructor(name, effects = [], value, weight){
     this.name = name
