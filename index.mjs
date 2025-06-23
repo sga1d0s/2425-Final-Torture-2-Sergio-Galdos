@@ -19,8 +19,17 @@ async function main() {
   // crear las 6 pocines
   const potion1 = cauldron.createPotion("Bear Claws", "Bee")
   const potion2 = cauldron.createPotion("Chicken's Egg", "Chaurus Eggs")
+  const potion3 = cauldron.createPotion("Chaurus Eggs", "Bleeding Crown")
+  const potion4 = cauldron.createPotion("Nightshade", "Ectoplasm")
+  const potion5 = cauldron.createPotion("Wheat", "Blue Mountain Flower")
+  const potion6 = cauldron.createPotion("Hanging Moss", "Human Heart")
 
   potion1.showInfo()
+  potion2.showInfo()
+  potion3.showInfo()
+  potion4.showInfo()
+  potion5.showInfo()
+  potion6.showInfo()
 
   // potion1.showInfo()
 }
