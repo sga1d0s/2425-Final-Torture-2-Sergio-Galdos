@@ -7,23 +7,7 @@ export default class Ingredient {
     this.weight = weight
   }
 
-/*   create(ingredients){
-    const ingredientArray = []
-    for (let i = 0; i < ingredients.length; i++) {
-      const ing = ingredients[i];
-
-      ingredientArray.push(new Ingredient(
-        ing.name, 
-        ing.effects,
-        ing.value,
-        ing.weight,
-      ))
-    }
-
-    return ingredientArray
-  } */
-
-  create(ing){
+  static create(ing){
     return new Ingredient(ing.name, ing.effects, ing.value, ing.weight)
   }
 }

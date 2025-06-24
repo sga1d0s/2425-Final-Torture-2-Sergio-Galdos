@@ -30,8 +30,6 @@ async function main() {
   potion4.showInfo()
   potion5.showInfo()
   potion6.showInfo()
-
-  // potion1.showInfo()
 }
 
 async function getData() {
@@ -52,12 +50,11 @@ async function getData() {
 function createIncredients(data) {
 
   const ingredientsArray = []
-  const ingredient = new Ingredient
 
   for (let i = 0; i < data.length; i++) {
     const ing = data[i];
 
-    ingredientsArray.push(ingredient.create(ing))
+    ingredientsArray.push(Ingredient.create(ing))
   }
 
   return ingredientsArray
