@@ -26,7 +26,7 @@ export default class Cauldron {
     this.extractIngredients(name1, name2)
 
     if (this.isSanity()) {
-      potion = new Sanity("Poison of Sanity", 1000, 1, 10)
+      potion = new Sanity("Poison of Sanity", 1000, 1, 50)
     } else if (this.isPotion().elixir) {
       potion = new Elixir(`${this.mod} elixir of ${this.name}`, value, weight = 10, time = "time")
     } else if (this.isPotion().poison) {
@@ -104,6 +104,7 @@ export default class Cauldron {
                 this.name = `${commonEffectsNegative[0]} and ${commonEffectsNegative[1]}`
               }
             }
+
           }
         }
       }

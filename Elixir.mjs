@@ -9,6 +9,7 @@ export default class Elixir extends Potion {
 
   showInfo(){
     //
+    console.log("")
     console.log(this.name)
     console.log(`Value: \t\t${this.value}`)
     console.log(`Weight: \t${this.weight}`)

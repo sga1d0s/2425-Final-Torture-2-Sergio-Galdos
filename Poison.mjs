@@ -1,14 +1,15 @@
 import Potion from "./Potion.mjs";
 
 export default class Poison extends Potion {
-  constructor(name, value, weight, time){
+  constructor(name, value, weight, time) {
     super(name, value, weight)
 
     this.time = time
   }
 
-  showInfo(){
+  showInfo() {
     //
+    console.log("")
     console.log(this.name)
     console.log(`Value: \t\t${this.value}`)
     console.log(`Weight: \t${this.weight}`)
