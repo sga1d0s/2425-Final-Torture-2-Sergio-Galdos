@@ -25,15 +25,13 @@ export default class Cauldron {
     // extraer información de cada ingrediente
     this.extractIngredients(name1, name2)
 
-    let namePoison = `${this.mod} poison of ${this.name}`
-
     if (this.isSanity()) {
       potion = new Sanity("Poison of Sanity", 1000, 1, 10)
-    } else if (this.isElixir()) {
+    } else if (this.isPotion().elixir) {
       potion = new Elixir(`${this.mod} elixir of ${this.name}`, value, weight = 10, time = "time")
-    } else /* if (this.isPoison()) {
-      potion = new Poison(namePoison, value, weight = 10, time = "time")
-    } else  */ potion = new ArrantPrack("ArrantPrack", 1, 0, 1)
+    } else if (this.isPotion().poison) {
+      potion = new Poison(`${this.mod} elixir of ${this.name}`, value, weight = 10, time = "time")
+    } else potion = new ArrantPrack("ArrantPrack", 1, 0, 1)
 
     // devolver la pocion creada
     return potion
@@ -53,13 +51,15 @@ export default class Cauldron {
     }
   }
 
-  isElixir() {
+  isPotion() {
     const negativeEffects = ["Weakness", "Damage", "Ravage", "Frenzy", "Fear", "Paralisis", "Slow"]
     const positiveEffects = ["Fortify", "Resist", "Cure", "Restore", "Regenerate", "Invisibility", "Waterbreathing"]
 
-    const commonEffects = []
+    const commonEffectsPositive = []
+    const commonEffectsNegative = []
 
     let elixir = false
+    let poison = false
 
     for (let i = 0; i < this.i1.effects.length; i++) {
       const effect1 = this.i1.effects[i];
@@ -72,23 +72,36 @@ export default class Cauldron {
           // dividir en palabras effect2
           let effectWords = effect2.split(" ")
 
-          // comparar cada palabra con el array de positivos y negativos
           for (let k = 0; k < effectWords.length; k++) {
             const element = effectWords[k];
 
+            // comparar cada palabra con el array de positivos
             if (positiveEffects.includes(element)) {
-
-              commonEffects.push(effect2)
-     
               elixir = true
+              commonEffectsPositive.push(effect2)
 
-              if (commonEffects.length === 1) {
+              if (commonEffectsPositive.length === 1) {
                 this.mod = "Leeser"
-                this.name = commonEffects
+                this.name = commonEffectsPositive
               }
-              if (commonEffects.length > 1) {
+              if (commonEffectsPositive.length > 1) {
                 this.mod = "Greater"
-                this.name = commonEffects
+                this.name = `${commonEffectsPositive[0]} and ${commonEffectsPositive[1]}`
+              }
+            }
+
+            // comparar cada palabra con el array de positivos
+            if (negativeEffects.includes(element)) {
+              poison = true
+              commonEffectsNegative.push(effect2)
+
+              if (commonEffectsNegative.length === 1) {
+                this.mod = "Leeser"
+                this.name = commonEffectsNegative
+              }
+              if (commonEffectsNegative.length > 1) {
+                this.mod = "Greater"
+                this.name = `${commonEffectsNegative[0]} and ${commonEffectsNegative[1]}`
               }
             }
           }
@@ -96,7 +109,7 @@ export default class Cauldron {
       }
     }
 
-    return elixir
+    return { elixir, poison }
   }
 
   isSanity() {
